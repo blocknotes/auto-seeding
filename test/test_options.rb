@@ -1,7 +1,7 @@
+# require 'pry'
 require 'minitest/autorun'
 require 'ostruct'
 require 'pathname'
-# require 'pry'
 require 'yaml'
 require_relative '../lib/auto-seeding'
 
@@ -38,8 +38,6 @@ describe 'AutoSeeding Options' do
 
   describe 'When using constructor options hash' do
     it 'must merge the internal options' do
-      # p @test_options.sources
-      # p @test_options.options
       assert_nil( @test_options.options[:conf][:seeder] ) # overriden by file option
       assert_equal( @test_options.options[:auto_create], [:profile] )
       assert_equal( @test_options.options[:ignore_attrs], [:id] )

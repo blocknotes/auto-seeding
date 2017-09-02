@@ -1,7 +1,7 @@
+# require 'pry'
 require 'minitest/autorun'
 require 'ostruct'
 require 'pathname'
-# require 'pry'
 require 'yaml'
 require_relative '../lib/auto-seeding'
 
