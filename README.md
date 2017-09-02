@@ -1,4 +1,4 @@
-# Auto-seeding [![Gem Version](https://badge.fury.io/rb/auto-seeding.svg)](https://badge.fury.io/rb/auto-seeding)
+# Auto-seeding [![Gem Version](https://badge.fury.io/rb/auto-seeding.svg)](https://badge.fury.io/rb/auto-seeding) [![Build Status](https://travis-ci.org/blocknotes/auto-seeding.svg)](https://travis-ci.org/blocknotes/auto-seeding)
 
 A component to auto generate seed data with ActiveRecord using a set of predefined or custom rules respecting models validations.
 

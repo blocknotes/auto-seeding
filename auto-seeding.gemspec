@@ -15,6 +15,7 @@ Gem::Specification.new do |spec|
   spec.files       = ['lib/auto-seeding.rb']
   spec.homepage    = 'https://github.com/blocknotes/auto-seeding'
   spec.license     = 'MIT'
+  spec.add_development_dependency 'rake', '~> 12'
   spec.add_development_dependency 'activerecord', '~> 5'
   spec.add_development_dependency 'minitest', '~> 5'
   spec.add_development_dependency 'faker', '~> 1'
