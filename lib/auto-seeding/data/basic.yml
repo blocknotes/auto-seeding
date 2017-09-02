@@ -1,0 +1,47 @@
+sources:
+  types:
+    boolean:
+      source_model: AutoSeeding::Source
+      source_method: random_boolean
+    date:
+      source_model: Date
+      source_method: today
+      post_process: ->( val ) { val + rand( -30..30 ) }
+    datetime:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+    decimal:
+      source_model: Random
+      source_method: rand
+    float:
+      source_model: Random
+      source_method: rand
+    integer:
+      source_model: Random
+      source_method: rand
+      # source_args: 20..25
+    string:
+      source_model: AutoSeeding::Source
+      source_method: random_string
+    text:
+      source_model: AutoSeeding::Source
+      source_method: random_string
+      source_args: 50
+    time:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { val + rand( 0..DAY_SECONDS ) }
+    timestamp:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+  fields:
+    -
+      in:
+        - name
+        - title
+      source_model: AutoSeeding::Source
+      source_method: random_string
+      source_args: 5
+      type: string

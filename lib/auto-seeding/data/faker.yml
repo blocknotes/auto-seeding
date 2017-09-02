@@ -1,0 +1,75 @@
+sources:
+  types:
+    boolean:
+      source_model: AutoSeeding::Source
+      source_method: random_boolean
+    date:
+      source_model: Date
+      source_method: today
+      post_process: ->( val ) { val + rand( -30..30 ) }
+    datetime:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+    decimal:
+      source_model: Random
+      source_method: rand
+    float:
+      source_model: Random
+      source_method: rand
+    integer:
+      source_model: Random
+      source_method: rand
+    string:
+      source_model: Faker::Hipster
+      source_method: sentence
+    text:
+      source_model: Faker::Hipster
+      source_method: paragraph
+    time:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { val + rand( -MONTH_SECONDS..MONTH_SECONDS ) }
+    timestamp:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+  fields:
+    # -
+    #   in:
+    #     - name
+    #     - title
+    #   source_model: Faker::Hipster
+    #   source_method: word
+    #   type: string
+    -
+      regexp: ^(.+_|)email(|_.+)$
+      source_model: Faker::Internet
+      source_method: safe_email
+      type: string
+    -
+      regexp: ^(.+_|)name(|_.+)$
+      source_model: Faker::Hipster
+      source_method: word
+      type: string
+    -
+      regexp: ^(.+_|)title(|_.+)$
+      source_model: Faker::Book
+      source_method: genre
+      type: string
+    -
+      regexp: ^(.+_|)url(|_.+)$
+      source_model: Faker::Internet
+      source_method: url
+      source_args: example.com
+      type: string
+      # source_args:
+      #   - example.com
+      #   - /foobar.html
+    # Models
+    -
+      model: ^(.+_|)admin(|_.+)$|^(.+_|)author(|_.+)$|^(.+_|)user(|_.+)$
+      regexp: ^(.+_|)name(|_.+)$
+      source_model: Faker::Book
+      source_method: author
+      type: string

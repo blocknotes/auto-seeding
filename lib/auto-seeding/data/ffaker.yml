@@ -1,0 +1,69 @@
+sources:
+  types:
+    boolean:
+      source_model: FFaker::Boolean
+      source_method: random
+    date:
+      source_model: Date
+      source_method: today
+      post_process: ->( val ) { val + rand( -30..30 ) }
+    datetime:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+    decimal:
+      source_model: Random
+      source_method: rand
+    float:
+      source_model: Random
+      source_method: rand
+    integer:
+      source_model: Random
+      source_method: rand
+    string:
+      source_model: FFaker::Book
+      source_method: genre
+    text:
+      source_model: FFaker::Book
+      source_method: description
+    time:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { val + rand( -MONTH_SECONDS..MONTH_SECONDS ) }
+    timestamp:
+      source_model: Time
+      source_method: now
+      post_process: ->( val ) { ( val + rand( -MONTH_SECONDS..MONTH_SECONDS ) ).to_datetime }
+  fields:
+    # -
+    #   in:
+    #     - title
+    #   source_model: FFaker::Book
+    #   source_method: title
+    #   type: string
+    -
+      regexp: ^(.+_|)email(|_.+)$
+      source_model: FFaker::Internet
+      source_method: safe_email
+      type: string
+    -
+      regexp: ^(.+_|)name(|_.+)$
+      source_model: FFaker::Movie
+      source_method: title
+      type: string
+    -
+      regexp: ^(.+_|)title(|_.+)$
+      source_model: FFaker::Book
+      source_method: title
+      type: string
+    -
+      regexp: ^(.+_|)url(|_.+)$
+      source_model: FFaker::Internet
+      source_method: http_url
+      type: string
+    -
+      model: ^(.+_|)admin(|_.+)$|^(.+_|)author(|_.+)$|^(.+_|)user(|_.+)$
+      regexp: ^(.+_|)name(|_.+)$
+      source_model: FFaker::Name
+      source_method: name
+      type: string

@@ -1,0 +1,8 @@
+sources:
+  fields:
+    -
+      regexp: ^(.+_|)name(|_.+)$
+      source_model: AutoSeeding::Source
+      source_method: random_string
+      source_args: 1 # test field
+      type: string
