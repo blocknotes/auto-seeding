@@ -67,7 +67,7 @@ module AutoSeeding
           if( f[:in] && f[:in].include?( col.to_s ) ) ||
             ( f[:regexp] && Regexp.new( f[:regexp], Regexp::IGNORECASE ).match( col.to_s ) )
             col_ = ( f[:prepend] || f[:append] ) ? ( f[:prepend].to_s + col.to_s + f[:append].to_s ) : col.to_s
-            @columns[col][:src] ||= Source.new( col, :string, @columns[col][:validators], f )
+            @columns[col][:src] ||= Source.new( col, f[:type] ? f[:type].to_sym : :string, @columns[col][:validators], f )
             object.send( col_ + '=', @columns[col][:src].gen )
             found = true
             break
@@ -124,18 +124,18 @@ module AutoSeeding
           ret[:in] = validator.options[:in]
         when 'LengthValidator'
           if validator.options[:is]
-            ret[:minimum] = validator.options[:is]
-            ret[:maximum] = validator.options[:is]
+            ret[:length_minimum] = validator.options[:is]
+            ret[:length_maximum] = validator.options[:is]
           else
-            ret[:minimum] = validator.options[:minimum]
-            ret[:maximum] = validator.options[:maximum]
+            ret[:length_minimum] = validator.options[:minimum]
+            ret[:length_maximum] = validator.options[:maximum]
           end
         when 'NumericalityValidator'
-          ret[:greater_than] = validator.options[:greater_than]
-          ret[:greater_than_or_equal_to] = validator.options[:greater_than_or_equal_to]
+          ret[:num_gt] = validator.options[:greater_than]
+          ret[:num_gte] = validator.options[:greater_than_or_equal_to]
           ret[:equal_to] = validator.options[:equal_to]
-          ret[:less_than] = validator.options[:less_than]
-          ret[:less_than_or_equal_to] = validator.options[:less_than_or_equal_to]
+          ret[:num_lt] = validator.options[:less_than]
+          ret[:num_lte] = validator.options[:less_than_or_equal_to]
           # ret[:other_than] = validator.options[:other_than] # TODO: not implemented
           # ret[:odd] = validator.options[:odd]               # TODO: not implemented
           # ret[:even] = validator.options[:even]             # TODO: not implemented

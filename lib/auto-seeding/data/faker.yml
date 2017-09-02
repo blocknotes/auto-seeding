@@ -29,7 +29,7 @@ sources:
     time:
       source_model: Time
       source_method: now
-      post_process: ->( val ) { val + rand( -MONTH_SECONDS..MONTH_SECONDS ) }
+      post_process: ->( val ) { val + rand( 0..DAY_SECONDS ) }
     timestamp:
       source_model: Time
       source_method: now

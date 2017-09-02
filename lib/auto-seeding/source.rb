@@ -58,22 +58,15 @@ module AutoSeeding
         else
           case type
           when :float
-            min = @rules[:greater_than_or_equal_to] ? @rules[:greater_than_or_equal_to].to_f : ( @rules[:greater_than] ? ( @rules[:greater_than].to_f - 1 ) : MIN_FLOAT )
-            max = @rules[:less_than_or_equal_to] ? @rules[:less_than_or_equal_to].to_f : ( @rules[:less_than] ? ( @rules[:less_than].to_f - 1 ) : MAX_FLOAT )
+            min = @rules[:num_gte] ? @rules[:num_gte].to_f : ( @rules[:num_gt] ? ( @rules[:num_gt].to_f + 0.1 ) : MIN_FLOAT )
+            max = @rules[:num_lte] ? @rules[:num_lte].to_f : ( @rules[:num_lt] ? ( @rules[:num_lt].to_f - 0.1 ) : MAX_FLOAT )
             @source_class.send( @source_method, @source_args ? eval( @source_args ) : (min .. max) )
           when :integer
-            min = @rules[:greater_than_or_equal_to] ? @rules[:greater_than_or_equal_to].to_i : ( @rules[:greater_than] ? ( @rules[:greater_than].to_i - 1 ) : MIN_INT )
-            max = @rules[:less_than_or_equal_to] ? @rules[:less_than_or_equal_to].to_i : ( @rules[:less_than] ? ( @rules[:less_than].to_i - 1 ) : MAX_INT )
+            min = @rules[:num_gte] ? @rules[:num_gte].to_i : ( @rules[:num_gt] ? ( @rules[:num_gt].to_i + 1 ) : MIN_INT )
+            max = @rules[:num_lte] ? @rules[:num_lte].to_i : ( @rules[:num_lt] ? ( @rules[:num_lt].to_i - 1 ) : MAX_INT )
             @source_class.send( @source_method, @source_args ? eval( @source_args ) : (min .. max) )
-          when :string
-            v = @source_class.send( @source_method, *@source_args ).to_s
-            v = v.ljust( @rules[:minimum], '-' ) if @rules[:minimum]
-            v = v.slice( 0..( @rules[:maximum] - 1 ) ) if @rules[:maximum]
-            v
-          when :time
-            @source_class.send( @source_method, *@source_args ).to_time
-          # when :date
-          # when :boolean
+          when :string, :text
+            @source_class.send( @source_method, *@source_args ).to_s
           else
             @source_class.send( @source_method, *@source_args )
           end
@@ -82,6 +75,23 @@ module AutoSeeding
       if @options[:post_process]
         post_process = eval @options[:post_process]
         value = post_process.call( value )
+      end
+
+      # validations
+      case type
+      when :float
+        value = ( @rules[:num_gt].to_f + 0.1 ) if @rules[:num_gt] && ( value <= @rules[:num_gt].to_f )
+        value = @rules[:num_gte].to_f if @rules[:num_gte] && ( value < @rules[:num_gte].to_f )
+        value = ( @rules[:num_lt].to_f - 0.1 ) if @rules[:num_lt] && ( value >= @rules[:num_lt].to_f )
+        value = @rules[:num_lte].to_f if @rules[:num_lte] && ( value > @rules[:num_lte].to_f )
+      when :integer
+        value = ( @rules[:num_gt].to_i + 1 ) if @rules[:num_gt] && ( value <= @rules[:num_gt].to_i )
+        value = @rules[:num_gte].to_i if @rules[:num_gte] && ( value < @rules[:num_gte].to_i )
+        value = ( @rules[:num_lt].to_i - 1 ) if @rules[:num_lt] && ( value >= @rules[:num_lt].to_i )
+        value = @rules[:num_lte].to_i if @rules[:num_lte] && ( value > @rules[:num_lte].to_i )
+      when :string, :text
+        value = value.ljust( @rules[:length_minimum], '-' ) if @rules[:length_minimum]
+        value = value.slice( 0..( @rules[:length_maximum] - 1 ) ) if @rules[:length_maximum]
       end
 
       if @rules[:not_in] && @rules[:not_in].include?( value )

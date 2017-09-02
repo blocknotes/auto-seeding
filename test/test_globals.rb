@@ -23,7 +23,7 @@ describe 'AutoSeeding global config' do
       # p auto_seeding.options
       assert_equal( auto_seeding.options[:conf][:seeder], :ffaker )
       auto_seeding2 = AutoSeeding::Seeder.new
-      assert_equal( auto_seeding.options[:conf][:seeder], :ffaker )
+      assert_equal( auto_seeding2.options[:conf][:seeder], :ffaker )
     end
   end
 end
