@@ -57,7 +57,7 @@ module AutoSeeding
           @rules[:accept].sample
         else
           case type
-          when :float
+          when :float, :decimal
             min = @rules[:num_gte] ? @rules[:num_gte].to_f : ( @rules[:num_gt] ? ( @rules[:num_gt].to_f + 0.1 ) : MIN_FLOAT )
             max = @rules[:num_lte] ? @rules[:num_lte].to_f : ( @rules[:num_lt] ? ( @rules[:num_lt].to_f - 0.1 ) : MAX_FLOAT )
             @source_class.send( @source_method, @source_args ? eval( @source_args ) : (min .. max) )
@@ -79,7 +79,7 @@ module AutoSeeding
 
       # validations
       case type
-      when :float
+      when :float, :decimal
         value = ( @rules[:num_gt].to_f + 0.1 ) if @rules[:num_gt] && ( value <= @rules[:num_gt].to_f )
         value = @rules[:num_gte].to_f if @rules[:num_gte] && ( value < @rules[:num_gte].to_f )
         value = ( @rules[:num_lt].to_f - 0.1 ) if @rules[:num_lt] && ( value >= @rules[:num_lt].to_f )

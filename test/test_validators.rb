@@ -25,10 +25,10 @@ class TestObject # < ActiveRecord::Base
     title3:   :text,
     title4:   :text,
     title5:   :text,
-    integer:  :integer,
-    number:   :float,
-    number2:  :decimal,
-    number3:  :integer,
+    integer:  :float,
+    number:   :integer,
+    number2:  :float,
+    number3:  :decimal,
     number4:  :integer,
     unique:   :string,
     unique2:  :integer
@@ -50,9 +50,9 @@ class TestObject # < ActiveRecord::Base
   validates :title5, length: { is: 18 }
   validates :integer, numericality: { only_integer: true }
   validates :number, numericality: true
-  validates :number2, numericality: { greater_than: 10, less_than_or_equal_to: 20 }
-  validates :number3, numericality: { greater_than_or_equal_to: 10, less_than: 20 }
-  validates :number4, numericality: { equal_to: 15 }
+  validates :number2, numericality: { greater_than: 15, less_than_or_equal_to: 20 }
+  validates :number3, numericality: { greater_than_or_equal_to: 15, less_than: 20 }
+  validates :number4, numericality: { equal_to: 18 }
   validates :unique, uniqueness: true
   validates :unique2, uniqueness: { scope: :email }
 
@@ -128,11 +128,11 @@ describe 'Check validators' do
       # --- numericality ------------------------------------------------------
       # cols[:number]  # -> set type to integer ?
       # cols[:integer] # -> set type to integer ?
-      assert_equal cols[:number2][:validators][:num_gt],   10
+      assert_equal cols[:number2][:validators][:num_gt],   15
       assert_equal cols[:number2][:validators][:num_lte],  20
-      assert_equal cols[:number3][:validators][:num_gte],  10
+      assert_equal cols[:number3][:validators][:num_gte],  15
       assert_equal cols[:number3][:validators][:num_lt],   20
-      assert_equal cols[:number4][:validators][:equal_to], 15
+      assert_equal cols[:number4][:validators][:equal_to], 18
       # --- presence ----------------------------------------------------------
       # TODO: not implemented
       # --- absence -----------------------------------------------------------
@@ -146,9 +146,22 @@ describe 'Check validators' do
       # TODO: not implemented
     end
 
-    # it 'must generate values respecting validations rules' do
-    #   obj = @test_validators.update( TestObject.new )
-    #   p obj
-    # end
+    it 'must generate values respecting validations rules' do
+      obj = @test_validators.update( TestObject.new )
+      assert obj.privacy == '1' || obj.privacy == true
+      assert obj.privacy2
+      assert obj.email == obj.email_confirmation
+      assert obj.email2 == obj.email2_confirmation
+      assert !( ['a', 'b', 'c'].include?( obj.letter ) )
+      assert ['a', 'b', 'c'].include?( obj.letter2 )
+      assert obj.title.length  >= 15 && obj.title.length  <= 20
+      assert obj.title2.length >= 15 && obj.title2.length <= 20
+      assert obj.title3.length >= 15
+      assert obj.title4.length <= 20
+      assert obj.title5.length == 18
+      assert obj.number2 >  15 && obj.number2 <= 20
+      assert obj.number3 >= 15 && obj.number3 <  20
+      assert obj.number4 == 18
+    end
   end
 end

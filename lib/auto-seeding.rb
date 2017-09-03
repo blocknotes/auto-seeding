@@ -8,5 +8,5 @@ module AutoSeeding
   INFO = 'Auto seeding'.freeze
   DESC = 'Auto seeding functions'.freeze
   AUTHORS = [ [ 'Mattia Roccoberton', 'mat@blocknot.es', 'http://blocknot.es' ] ].freeze
-  VERSION = [ 0, 1, 0 ].freeze
+  VERSION = [ 0, 1, 2 ].freeze
 end
