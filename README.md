@@ -58,14 +58,14 @@ autoseeding = AutoSeeding::Seeder.new({
     fields: [                    # array of hashes - override fields rules
       {
         in: ['name'],
-        source_model: 'Faker::Hipster',
-        source_method: 'word',
+        source_model: 'Faker::StarWars',
+        source_method: 'character',
         type: 'string'
       },
       {
         regexp: '^(.+_|)title(|_.+)$',
-        source_model: 'Faker::Hipster',
-        source_method: 'word',
+        source_model: 'Faker::Book',
+        source_method: 'title',
         post_process: '->( val ) { val + " (seeding)" }',
         type: 'string'
       }
