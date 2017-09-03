@@ -37,7 +37,7 @@ class TestObject # < ActiveRecord::Base
   FIELDS_SET = ( FIELDS.keys + FIELDS_EXTRA ).map { |field| ( field.to_s + '=' ).to_sym }.freeze
 
   validates :privacy, acceptance: true
-  validates :privacy2, acceptance: { accept: 'yes' }
+  validates :privacy2, acceptance: { accept: true }
   validates :email, confirmation: true
   validates :email_confirmation, presence: true
   validates :email2, confirmation: { case_sensitive: false }
@@ -107,7 +107,7 @@ describe 'Check validators' do
       ## Validation Helpers
       # --- acceptance --------------------------------------------------------
       assert_equal cols[:privacy][:validators][:accept], ['1', true]
-      assert_equal cols[:privacy2][:validators][:accept], ['yes']
+      assert_equal cols[:privacy2][:validators][:accept], [true]
       # --- confirmation ------------------------------------------------------
       assert_equal @test_validators.extra_validations[:confirmations], [:email, :email2]
       # --- exclusion ---------------------------------------------------------
