@@ -113,7 +113,7 @@ module AutoSeeding
       validators.each do |validator|
         case validator.class.name.split( '::' ).last
         when 'AcceptanceValidator'
-          ret[:accept] = validator.options[:accept]
+          ret[:accept] = validator.options[:accept].is_a?( String ) ? [ validator.options[:accept] ] : validator.options[:accept]
         when 'ConfirmationValidator'
           # ret[:confirmation] = validator.options[:confirmation]
           @extra_validations[:confirmations] += validator.attributes
