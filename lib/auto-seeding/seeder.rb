@@ -85,12 +85,19 @@ module AutoSeeding
         next if @options[:skip_associations].include? association.to_sym
         model2 = data.klass
         if @options[:auto_create] && @options[:auto_create].include?( association.to_sym )
-          auto_seeding = AutoSeeding::Seeder.new( { conf: { seeder: @options[:seeder] }, skip_associations: [model.to_s.underscore.to_sym] } )
+          auto_seeding = AutoSeeding::Seeder.new( { conf: { seeder: @options[:seeder] || @@globals[:conf][:seeder] }, skip_associations: [model.to_s.underscore.to_sym] } )
           object.send( association + '=', auto_seeding.update( model2.new ) )
         else
           @models[model2.table_name] ||= model2.all
-          sam = @models[model2.table_name].sample
-          object.send( association + '=', sam ) if sam
+          if data.is_a?( ActiveRecord::Reflection::ThroughReflection )  # many-to-many
+            sam = @models[model2.table_name].sample( rand( 5 ) )
+            object.send( association ).push( sam ) if sam.any?
+          elsif data.parent_reflection && data.parent_reflection.is_a?( ActiveRecord::Reflection::HasAndBelongsToManyReflection )
+            next
+          else
+            sam = @models[model2.table_name].sample
+            object.send( association + '=', sam ) if sam
+          end
         end
       end
 

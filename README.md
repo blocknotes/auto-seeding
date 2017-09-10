@@ -18,7 +18,7 @@ end
 
 - **conf/seeder**: seeding source [*nil* | *:faker* | *:ffaker*] (*:faker* requires Faker gem, *:ffaker* requires FFaker gem)
 - **conf/file**: load seed configuration from a local file
-- **auto_create**: array of nested associations to create while seeding, ex. [*:profile*],
+- **auto_create**: array of nested associations to create while seeding (useful for has_one associations), ex. [*:profile*]
 - **ignore_attrs**: ignore some attributes, ex. [*:id*, *updated_at*]
 - **skip_associations**: array of nested associations to skip while seeding, ex. [*:posts*]
 - **sources**: configure sources rules for autoseed data
@@ -102,6 +102,14 @@ AutoSeeding::Seeder.new({
   }
 }
 ```
+
+To avoid problems with PaperTrail use:
+
+`AutoSeeding::Seeder.config({ skip_associations: [:versions] })`
+
+## Do you like it? Star it!
+
+If you use this component just star it. A developer is more motivated to improve a project when there is some interest.
 
 ## Contributors
 
